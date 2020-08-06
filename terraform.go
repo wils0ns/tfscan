@@ -6,34 +6,41 @@ import (
 	"io/ioutil"
 )
 
-type TerraformChildModule struct {
-	Resources    []*TerraformResource    `json:"resources"`
-	Address      string                  `json:"address"`
-	ChildModules []*TerraformChildModule `json:"child_modules"`
-}
-
-// TerraformResource struct
+// TerraformResource represents state resources
 type TerraformResource struct {
 	Address       string                 `json:"address"`
 	Mode          string                 `json:"mode"`
 	Type          string                 `json:"type"`
 	Name          string                 `json:"name"`
+	Index         string                 `json:"index"`
 	ProviderName  string                 `json:"provider_name"`
 	SchemaVersion int                    `json:"schema_version"`
 	Values        map[string]interface{} `json:"values"`
 }
 
-// TerraformModule struct
+// TerraformModule represents state top level modules
 type TerraformModule struct {
-	Resources    []*TerraformResource    `json:"resources"`
-	ChildModules []*TerraformChildModule `json:"child_modules"`
+	Resources    []*TerraformResource `json:"resources"`
+	Address      string               `json:"address"`
+	ChildModules []*TerraformModule   `json:"child_modules"`
 }
 
-// TerraformState struct
+// TerraformState represents Terraform's state object
 type TerraformState struct {
 	FormatVersion    string `json:"format_version"`
 	TerraformVersion string `json:"terraform_version"`
 	Values           map[string]*TerraformModule
+}
+
+// TerraformModuleVisitor is the interface that wraps the Visit method
+// The Visit Method takes the module to be visited and the its parent module
+type TerraformModuleVisitor interface {
+	Visit(*TerraformModule, *TerraformModule)
+}
+
+// TerraformResourceNotFoundError raised when resources are not found
+type TerraformResourceNotFoundError struct {
+	filter string
 }
 
 // NewTerraformState creates a new TerraformState object
@@ -52,40 +59,11 @@ func NewTerraformState(r io.Reader) (*TerraformState, error) {
 	return state, nil
 }
 
-func getChildResourceTypes(cm *TerraformChildModule) map[string]struct{} {
-	typeMap := make(map[string]struct{})
-	for _, res := range cm.Resources {
-		typeMap[res.Type] = struct{}{}
-	}
+// VisitModules runs Visitor.Visit on the module and all its child modules
+func (tfm *TerraformModule) VisitModules(visitor TerraformModuleVisitor, parent *TerraformModule) {
+	visitor.Visit(tfm, parent)
 
-	for _, cm := range cm.ChildModules {
-		for k := range getChildResourceTypes(cm) {
-			typeMap[k] = struct{}{}
-		}
+	for _, childMod := range tfm.ChildModules {
+		childMod.VisitModules(visitor, tfm)
 	}
-	return typeMap
-}
-
-// GetResourceTypes returns a slice of types of resources present in the state
-func (tfs *TerraformState) GetResourceTypes() []string {
-	typeMap := make(map[string]struct{})
-	for _, res := range tfs.Values["root_module"].Resources {
-		typeMap[res.Type] = struct{}{}
-	}
-
-	for _, cm := range tfs.Values["root_module"].ChildModules {
-		childs := getChildResourceTypes(cm)
-		for k := range childs {
-			typeMap[k] = struct{}{}
-		}
-	}
-
-	typeList := make([]string, len(typeMap))
-
-	i := 0
-	for k := range typeMap {
-		typeList[i] = k
-		i++
-	}
-	return typeList
 }

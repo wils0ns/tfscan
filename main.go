@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"sort"
 
 	"github.com/fatih/color"
 )
@@ -16,14 +15,26 @@ var flagJSONFile = flag.String("json", "", "Path to a state or plan JSON file")
 var flagResTypes = flag.Bool("types", false, "Only list the type of resources present in the state")
 var flagResTree = flag.Bool("tree", false, "Print resources grouped by module")
 
-// ListResources lists all resources within a state
-func ListResources(tfs *TerraformState) {
-	var resources []string
-	cyan := color.New(color.FgCyan).SprintFunc()
-	for _, res := range tfs.Values["root_module"].Resources {
-		fmt.Println(cyan(res.Address), res.Values["id"])
-		// fmt.Println(res)
-		resources = append(resources, res.Name)
+func printResourceTree(tfs *TerraformState) {
+	for key, mod := range tfs.Values {
+		fmt.Printf("%v:\n", key)
+		mod.VisitModules(&resourcesTreeVisitor{}, nil)
+	}
+}
+
+func printResourceTypes(tfs *TerraformState) {
+	for _, mod := range tfs.Values {
+		v := NewResourceTypeVisitor()
+		mod.VisitModules(v, nil)
+		resTypes, err := v.Types()
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(0)
+		}
+
+		for _, item := range resTypes {
+			fmt.Println(item)
+		}
 	}
 }
 
@@ -36,19 +47,11 @@ func ProcessState(r io.Reader) {
 	}
 
 	if *flagResTypes {
-		resTypes := state.GetResourceTypes()
-		sort.Strings(resTypes)
-		for _, resType := range resTypes {
-			fmt.Println(resType)
-		}
+		printResourceTypes(state)
 		os.Exit(0)
 	}
 
-	if *flagResTree {
-		// WIP
-	}
-
-	ListResources(state)
+	printResourceTree(state)
 	os.Exit(0)
 }
 
@@ -87,6 +90,7 @@ func main() {
 		ProcessState(jsonFile)
 	}
 
+	// Print tool usage if no arguments have been passed
 	if len(os.Args) < 2 {
 		flag.Usage()
 	}
