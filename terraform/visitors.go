@@ -53,9 +53,6 @@ func (v *ResourceTypesVisitor) Visit(m *Module, parent *Module) {
 	for _, res := range m.Resources {
 		v.typesMap[res.Type] = struct{}{}
 	}
-	for _, cm := range m.ChildModules {
-		v.Visit(cm, m)
-	}
 }
 
 // Types returns a list of unique resource types

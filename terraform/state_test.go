@@ -116,7 +116,7 @@ func TestResourceTypes(t *testing.T) {
 	expectedNumResTypes := len(expectedTypes)
 
 	if numResTypes == expectedNumResTypes {
-		for i, _ := range resTypes {
+		for i := range resTypes {
 			if resTypes[i] != expectedTypes[i] {
 				t.Errorf("Expected: %v, Got: %v", expectedTypes[i], resTypes[i])
 			}

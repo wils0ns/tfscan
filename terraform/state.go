@@ -46,7 +46,7 @@ func (s *State) GetResourceByFullAddress(address string) (*Resource, error) {
 func (s *State) ResourceTypes() ([]string, error) {
 	v := NewResourceTypeVisitor()
 	for _, m := range s.Values {
-		v.Visit(m, nil)
+		m.VisitModules(v, nil)
 	}
 
 	return v.Types()

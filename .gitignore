@@ -1,3 +1,4 @@
 tfscan
 dist/
 *.json
+*.out
