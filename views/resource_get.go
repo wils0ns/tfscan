@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/wilson-codeminus/tfscan/terraform"
+	"github.com/wils0ns/tfscan/terraform"
 )
 
 // PrintResource prints the resource that matches the given address

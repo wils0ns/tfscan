@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"github.com/fatih/color"
-	"github.com/wilson-codeminus/tfscan/terraform"
-	"github.com/wilson-codeminus/tfscan/views"
+	"github.com/wils0ns/tfscan/terraform"
+	"github.com/wils0ns/tfscan/views"
 )
 
 // Command line flags

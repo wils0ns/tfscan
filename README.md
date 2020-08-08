@@ -7,12 +7,12 @@ Inspect Terraform resources in a state and plan JSON files
 Using go:
 
 ```bash
-git clone https://github.com/wilson-codeminus/tfscan.git
+git clone https://github.com/wils0ns/tfscan.git
 cd tfscan
 go install
 ```
 
-Or downloading the binary for a particular [release](https://github.com/wilson-codeminus/tfscan/releases).
+Or downloading the binary for a particular [release](https://github.com/wils0ns/tfscan/releases).
 
 ## Use examples
 

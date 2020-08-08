@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/wilson-codeminus/tfscan/terraform"
+	"github.com/wils0ns/tfscan/terraform"
 )
 
 // PrintResourceTypes prints all resource types within a state

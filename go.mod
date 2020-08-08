@@ -1,4 +1,4 @@
-module github.com/wilson-codeminus/tfscan
+module github.com/wils0ns/tfscan
 
 go 1.14
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/wilson-codeminus/tfscan/terraform"
+	"github.com/wils0ns/tfscan/terraform"
 )
 
 type resourceTree struct{}
