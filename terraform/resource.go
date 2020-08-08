@@ -1,5 +1,7 @@
 package terraform
 
+import "fmt"
+
 // Resource represents state resources
 type Resource struct {
 	Address       string                 `json:"address"`
@@ -15,4 +17,8 @@ type Resource struct {
 // ResourceNotFoundError raised when resources are not found
 type ResourceNotFoundError struct {
 	Address string
+}
+
+func (e *ResourceNotFoundError) Error() string {
+	return fmt.Sprintf("Unable to find resource: %v", e.Address)
 }

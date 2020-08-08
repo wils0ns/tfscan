@@ -72,6 +72,6 @@ func (v *ResourceTypesVisitor) Types() ([]string, error) {
 		return resTypes, nil
 	}
 
-	return nil, fmt.Errorf("Not resources found")
+	return nil, fmt.Errorf("No resources found")
 
 }

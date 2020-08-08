@@ -2,7 +2,6 @@ package terraform
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 )
@@ -38,7 +37,7 @@ func (s *State) GetResourceByFullAddress(address string) (*Resource, error) {
 	}
 
 	if resLookup.Resource == nil {
-		return nil, fmt.Errorf("Unable to find Resource by address: %v", address)
+		return nil, &ResourceNotFoundError{Address: address}
 	}
 	return resLookup.Resource, nil
 }
