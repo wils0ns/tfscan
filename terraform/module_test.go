@@ -12,7 +12,7 @@ type visitor struct {
 	ResCount int
 }
 
-func (v *visitor) Visit(m *terraform.Module, p *terraform.Module) {
+func (v *visitor) Visit(m, p *terraform.Module) {
 	v.ResCount += len(m.Resources)
 }
 

@@ -10,7 +10,7 @@ type Module struct {
 // ModuleVisitor is the interface that wraps the Visit method
 // The Visit Method takes the module to be visited and the its parent module
 type ModuleVisitor interface {
-	Visit(module *Module, parent *Module)
+	Visit(module, parent *Module)
 }
 
 // VisitModules runs Visitor.Visit on the module and all its child modules

@@ -12,7 +12,7 @@ type ResourceLookupVisitor struct {
 }
 
 // Visit searches for a resource that matches the Visitor's Address field
-func (v *ResourceLookupVisitor) Visit(module *Module, parent *Module) {
+func (v *ResourceLookupVisitor) Visit(module, parent *Module) {
 	if v.Resource != nil {
 		return
 	}
@@ -49,7 +49,7 @@ func NewResourceTypeVisitor() *ResourceTypesVisitor {
 }
 
 // Visit identify the unique resource types within Terraform modules
-func (v *ResourceTypesVisitor) Visit(m *Module, parent *Module) {
+func (v *ResourceTypesVisitor) Visit(m, parent *Module) {
 	for _, res := range m.Resources {
 		v.typesMap[res.Type] = struct{}{}
 	}
