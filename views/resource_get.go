@@ -10,7 +10,7 @@ import (
 
 // PrintResources prints the resource that matches the given address
 func PrintResources(state *terraform.State, address string) {
-	resources, err := state.GetResourcesByFullAddress(address)
+	resources, err := state.ResourceLookup(address)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)

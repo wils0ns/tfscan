@@ -62,7 +62,7 @@ func TestGetResourcesByFullAddress(t *testing.T) {
 	}
 
 	for _, s := range scenarios {
-		resources, err := state.GetResourcesByFullAddress(s.AddressRegExp)
+		resources, err := state.ResourceLookup(s.AddressRegExp)
 
 		errMsg := ""
 		expectedErrMsg := ""

@@ -29,8 +29,8 @@ func NewState(r io.Reader) (*State, error) {
 	return state, nil
 }
 
-// GetResourcesByFullAddress returns a slice of  resources that matches the given address regular expression
-func (s *State) GetResourcesByFullAddress(address string) ([]*Resource, error) {
+// ResourceLookup returns a slice of  resources that matches the given address regular expression
+func (s *State) ResourceLookup(address string) ([]*Resource, error) {
 	resLookup := ResourceLookupVisitor{AddressRegExp: address}
 	for _, m := range s.Values {
 		resLookup.Visit(m, nil)
