@@ -2,22 +2,27 @@ package terraform
 
 import (
 	"fmt"
+	"regexp"
 	"sort"
 )
 
 // ResourceLookupVisitor stores the resource found by the given address
 type ResourceLookupVisitor struct {
-	Address  string
-	Resource *Resource
+	AddressRegExp string
+	Resources     []*Resource
 }
 
-// Visit searches for a resource that matches the Visitor's Address field
+// Visit searches for resources that matches the Visitor's AddressRegExp field regular expression
 func (v *ResourceLookupVisitor) Visit(module, parent *Module) {
-	if v.Resource != nil {
-		return
-	}
 
 	for _, res := range module.Resources {
+
+		re, err := regexp.Compile(regexp.QuoteMeta(v.AddressRegExp))
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
 		address := res.Address
 		if module.Address != "" {
 			address = fmt.Sprintf("%v.%v", module.Address, address)
@@ -27,9 +32,8 @@ func (v *ResourceLookupVisitor) Visit(module, parent *Module) {
 			address = fmt.Sprintf("%v[\"%v\"]", address, res.Index)
 		}
 
-		if v.Address == address {
-			v.Resource = res
-			return
+		if re.MatchString(address) {
+			v.Resources = append(v.Resources, res)
 		}
 	}
 

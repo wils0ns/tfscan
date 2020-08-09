@@ -1,11 +1,5 @@
 package testdata
 
-import "os"
-
-func TestPath() (string, error) {
-	return os.Getwd()
-}
-
 var SampleJSONState = `
 {
   "format_version": "0.1",

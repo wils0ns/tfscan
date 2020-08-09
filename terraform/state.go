@@ -29,17 +29,17 @@ func NewState(r io.Reader) (*State, error) {
 	return state, nil
 }
 
-// GetResourceByFullAddress returns a Resource that matches the given address
-func (s *State) GetResourceByFullAddress(address string) (*Resource, error) {
-	resLookup := ResourceLookupVisitor{Address: address}
+// GetResourcesByFullAddress returns a slice of  resources that matches the given address regular expression
+func (s *State) GetResourcesByFullAddress(address string) ([]*Resource, error) {
+	resLookup := ResourceLookupVisitor{AddressRegExp: address}
 	for _, m := range s.Values {
 		resLookup.Visit(m, nil)
 	}
 
-	if resLookup.Resource == nil {
+	if len(resLookup.Resources) == 0 {
 		return nil, &ResourceNotFoundError{Address: address}
 	}
-	return resLookup.Resource, nil
+	return resLookup.Resources, nil
 }
 
 // ResourceTypes returns a list of all the unique resources within the state

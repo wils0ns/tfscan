@@ -28,7 +28,7 @@ func TestNewState(t *testing.T) {
 	}
 }
 
-func TestGetResourceByFullAddress(t *testing.T) {
+func TestGetResourcesByFullAddress(t *testing.T) {
 	sampleReader.Seek(0, 0)
 	state, err := terraform.NewState(sampleReader)
 	if err != nil {
@@ -36,29 +36,33 @@ func TestGetResourceByFullAddress(t *testing.T) {
 	}
 
 	scenarios := []struct {
-		FullAddress     string
-		ExpectedAddress string
-		ExpectedError   error
+		AddressRegExp     string
+		ExpectedAddresses []string
+		ExpectedError     error
 	}{
 		{
-			FullAddress:     "module.project.google_project.default",
-			ExpectedAddress: "google_project.default",
-			ExpectedError:   nil,
+			AddressRegExp: "module.project.google",
+			ExpectedAddresses: []string{
+				"google_project.default",
+				"google_project_iam_audit_config.audit_config",
+				"google_project_iam_member.owner",
+			},
+			ExpectedError: nil,
 		},
 		{
-			FullAddress:     "google_project_service.default[\"storage.googleapis.com\"]",
-			ExpectedAddress: "google_project_service.default",
-			ExpectedError:   nil,
+			AddressRegExp:     "google_project_service.default[\"storage.googleapis.com\"]",
+			ExpectedAddresses: []string{"google_project_service.default"},
+			ExpectedError:     nil,
 		},
 		{
-			FullAddress:     "no.resource",
-			ExpectedAddress: "",
-			ExpectedError:   &terraform.ResourceNotFoundError{Address: "no.resource"},
+			AddressRegExp:     "no.resource",
+			ExpectedAddresses: []string{},
+			ExpectedError:     &terraform.ResourceNotFoundError{Address: "no.resource"},
 		},
 	}
 
 	for _, s := range scenarios {
-		res, err := state.GetResourceByFullAddress(s.FullAddress)
+		resources, err := state.GetResourcesByFullAddress(s.AddressRegExp)
 
 		errMsg := ""
 		expectedErrMsg := ""
@@ -80,9 +84,14 @@ func TestGetResourceByFullAddress(t *testing.T) {
 		}
 
 		if s.ExpectedError == nil {
-			actual := res.Address
-			if actual != s.ExpectedAddress {
-				t.Error("Expected:", s.ExpectedAddress, "Got:", actual)
+			addresses := []string{}
+			for _, res := range resources {
+				addresses = append(addresses, res.Address)
+			}
+			for i := range addresses {
+				if addresses[i] != s.ExpectedAddresses[i] {
+					t.Error("Expected:", s.ExpectedAddresses[i], "Got:", addresses[i])
+				}
 			}
 		}
 
