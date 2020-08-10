@@ -73,3 +73,52 @@ google_project_iam_member
 google_project_service
 google_storage_bucket
 ```
+
+## Get resources by regular expression
+
+Command:
+
+```bash
+tfscan -json testdata/sample2.json -get google_project_service.default
+```
+
+Output:
+
+```bash
+[
+  {
+    "address": "google_project_service.default",
+    "mode": "managed",
+    "type": "google_project_service",
+    "name": "default",
+    "index": "datastore.googleapis.com",
+    "provider_name": "google",
+    "schema_version": 0,
+    "values": {
+      "disable_dependent_services": null,
+      "disable_on_destroy": false,
+      "id": "myproject-example-1/datastore.googleapis.com",
+      "project": "myproject-example-1",
+      "service": "datastore.googleapis.com",
+      "timeouts": null
+    }
+  },
+  {
+    "address": "google_project_service.default",
+    "mode": "managed",
+    "type": "google_project_service",
+    "name": "default",
+    "index": "storage-component.googleapis.com",
+    "provider_name": "google",
+    "schema_version": 0,
+    "values": {
+      "disable_dependent_services": null,
+      "disable_on_destroy": false,
+      "id": "myproject-example-1/storage-component.googleapis.com",
+      "project": "myproject-example-1",
+      "service": "storage-component.googleapis.com",
+      "timeouts": null
+    }
+  },
+]
+```
