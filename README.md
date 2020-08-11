@@ -14,7 +14,7 @@ go install
 
 Or downloading the binary for a particular [release](https://github.com/wils0ns/tfscan/releases).
 
-## Use examples
+## Examples
 
 ### Reading from `terraform` stdout
 
@@ -53,7 +53,7 @@ root_module:
 │  │  ├─ google_project_service.bigquery
 ```
 
-## Listing all unique resource types from a Terraform state JSON file
+### List all unique resource types
 
 Command:
 
@@ -74,12 +74,12 @@ google_project_service
 google_storage_bucket
 ```
 
-## Get resources by regular expression
+### Get resources by regular expression
 
 Command:
 
 ```bash
-tfscan -json testdata/sample2.json -get google_project_service.default
+tfscan -json state1.json -get google_project_service.default
 ```
 
 Output:
@@ -122,3 +122,96 @@ Output:
   },
 ]
 ```
+
+### Diff state resources
+
+Command:
+
+```bash
+```
+
+Output:
+
+```bash
+tfscan -json state2.json -diff state1.json -get google_app_engine_application.default
+ [
+   {
+     "address": "google_app_engine_application.default",
+     "mode": "managed",
+     "type": "google_app_engine_application",
+     "name": "default",
+     "index": "",
+     "provider_name": "google",
+     "schema_version": 0,
+     "values": {
+-      "app_id": "myproject-example-1",
++      "app_id": "myproject-example",
+       "auth_domain": "gmail.com",
+-      "code_bucket": "staging.myproject-example-1.appspot.com",
++      "code_bucket": "staging.myproject-example.appspot.com",
+       "database_type": "CLOUD_DATASTORE_COMPATIBILITY",
+-      "default_bucket": "myproject-example-1.appspot.com",
+-      "default_hostname": "myproject-example-1.ey.r.appspot.com",
++      "default_bucket": "myproject-example.appspot.com",
++      "default_hostname": "myproject-example.wl.r.appspot.com",
+       "feature_settings": [
+         {
+           "split_health_checks": true
+         }
+       ],
+-      "gcr_domain": "eu.gcr.io",
++      "gcr_domain": "us.gcr.io",
+       "iap": [],
+-      "id": "myproject-example-1",
+-      "location_id": "europe-west3",
+-      "name": "apps/myproject-example-1",
+-      "project": "myproject-example-1",
++      "id": "myproject-example",
++      "location_id": "us-west2",
++      "name": "apps/myproject-example",
++      "project": "myproject-example",
+       "serving_status": "SERVING",
+       "timeouts": null,
+       "url_dispatch_rule": []
+     }
+   }
+ ]
+```
+
+### Diff resource types between states
+
+Command:
+
+```bash
+tfscan -json testdata/state2.json -diff testdata/state1.json -types
+```
+
+Output:
+
+```bash
+ [
+   "google_app_engine_application",
+   "google_bigquery_dataset",
++  "google_cloud_scheduler_job",
++  "google_cloudfunctions_function",
++  "google_datastore_index",
++  "google_logging_metric",
+   "google_logging_project_sink",
+   "google_project",
+   "google_project_iam_audit_config",
+   "google_project_iam_member",
+   "google_project_service",
+-  "google_storage_bucket"
++  "google_pubsub_topic",
++  "google_service_account",
++  "google_storage_bucket",
++  "google_storage_bucket_object",
++  "null_resource"
+ ]
+```
+
+Diff Legend:
+
+* `-` : `state1.json` does not have this content and `state2.json` does.
+* `+` : `state1.json` has this content and `state2.json` does not.
+* ` ` : `state1.json` has the same content as `state2.json`
