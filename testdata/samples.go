@@ -1,5 +1,7 @@
 package testdata
 
+import "strings"
+
 var SampleJSONState = `
 {
   "format_version": "0.1",
@@ -15,12 +17,12 @@ var SampleJSONState = `
           "provider_name": "google",
           "schema_version": 0,
           "values": {
-            "app_id": "di-test-blueprint-odrs-data-1",
+            "app_id": "myproject-example-1",
             "auth_domain": "gmail.com",
-            "code_bucket": "staging.di-test-blueprint-odrs-data-1.appspot.com",
+            "code_bucket": "staging.myproject-example-1.appspot.com",
             "database_type": "CLOUD_DATASTORE_COMPATIBILITY",
-            "default_bucket": "di-test-blueprint-odrs-data-1.appspot.com",
-            "default_hostname": "di-test-blueprint-odrs-data-1.ey.r.appspot.com",
+            "default_bucket": "myproject-example-1.appspot.com",
+            "default_hostname": "myproject-example-1.ey.r.appspot.com",
             "feature_settings": [
               {
                 "split_health_checks": true
@@ -28,10 +30,10 @@ var SampleJSONState = `
             ],
             "gcr_domain": "eu.gcr.io",
             "iap": [],
-            "id": "di-test-blueprint-odrs-data-1",
+            "id": "myproject-example-1",
             "location_id": "europe-west3",
-            "name": "apps/di-test-blueprint-odrs-data-1",
-            "project": "di-test-blueprint-odrs-data-1",
+            "name": "apps/myproject-example-1",
+            "project": "myproject-example-1",
             "serving_status": "SERVING",
             "timeouts": null,
             "url_dispatch_rule": []
@@ -56,9 +58,9 @@ var SampleJSONState = `
           "values": {
             "condition": [],
             "etag": "BwWsIPSdhKk=",
-            "id": "di-test-blueprint-odrs-data-1/roles/datastore.importExportAdmin/serviceaccount:gke-sa@p-dre-eu-services.iam.gserviceaccount.com",
+            "id": "myproject-example-1/roles/datastore.importExportAdmin/serviceaccount:gke-sa@p-dre-eu-services.iam.gserviceaccount.com",
             "member": "serviceAccount:gke-sa@p-dre-eu-services.iam.gserviceaccount.com",
-            "project": "di-test-blueprint-odrs-data-1",
+            "project": "myproject-example-1",
             "role": "roles/datastore.importExportAdmin"
           },
           "depends_on": [
@@ -76,9 +78,9 @@ var SampleJSONState = `
           "values": {
             "condition": [],
             "etag": "BwWsIPSdhKk=",
-            "id": "di-test-blueprint-odrs-data-1/roles/datastore.user/serviceaccount:gke-sa@p-dre-eu-services.iam.gserviceaccount.com",
+            "id": "myproject-example-1/roles/datastore.user/serviceaccount:gke-sa@p-dre-eu-services.iam.gserviceaccount.com",
             "member": "serviceAccount:gke-sa@p-dre-eu-services.iam.gserviceaccount.com",
-            "project": "di-test-blueprint-odrs-data-1",
+            "project": "myproject-example-1",
             "role": "roles/datastore.user"
           },
           "depends_on": [
@@ -96,9 +98,9 @@ var SampleJSONState = `
           "values": {
             "condition": [],
             "etag": "BwWsIPSdhKk=",
-            "id": "di-test-blueprint-odrs-data-1/roles/logging.configWriter/serviceaccount:buildaccount@dre-configuration.iam.gserviceaccount.com",
+            "id": "myproject-example-1/roles/logging.configWriter/serviceaccount:buildaccount@dre-configuration.iam.gserviceaccount.com",
             "member": "serviceAccount:buildaccount@dre-configuration.iam.gserviceaccount.com",
-            "project": "di-test-blueprint-odrs-data-1",
+            "project": "myproject-example-1",
             "role": "roles/logging.configWriter"
           },
           "depends_on": [
@@ -116,9 +118,9 @@ var SampleJSONState = `
           "values": {
             "condition": [],
             "etag": "BwWsIPSdhKk=",
-            "id": "di-test-blueprint-odrs-data-1/roles/spanner.admin/serviceaccount:gke-sa@p-dre-eu-services.iam.gserviceaccount.com",
+            "id": "myproject-example-1/roles/spanner.admin/serviceaccount:gke-sa@p-dre-eu-services.iam.gserviceaccount.com",
             "member": "serviceAccount:gke-sa@p-dre-eu-services.iam.gserviceaccount.com",
-            "project": "di-test-blueprint-odrs-data-1",
+            "project": "myproject-example-1",
             "role": "roles/spanner.admin"
           },
           "depends_on": [
@@ -136,9 +138,9 @@ var SampleJSONState = `
           "values": {
             "condition": [],
             "etag": "BwWsIPSdhKk=",
-            "id": "di-test-blueprint-odrs-data-1/roles/storage.admin/serviceaccount:p-dre-eu-services@appspot.gserviceaccount.com",
+            "id": "myproject-example-1/roles/storage.admin/serviceaccount:p-dre-eu-services@appspot.gserviceaccount.com",
             "member": "serviceAccount:p-dre-eu-services@appspot.gserviceaccount.com",
-            "project": "di-test-blueprint-odrs-data-1",
+            "project": "myproject-example-1",
             "role": "roles/storage.admin"
           },
           "depends_on": [
@@ -156,9 +158,9 @@ var SampleJSONState = `
           "values": {
             "condition": [],
             "etag": "BwWsIPSdhKk=",
-            "id": "di-test-blueprint-odrs-data-1/roles/storage.admin/serviceaccount:gke-sa@p-dre-eu-services.iam.gserviceaccount.com",
+            "id": "myproject-example-1/roles/storage.admin/serviceaccount:gke-sa@p-dre-eu-services.iam.gserviceaccount.com",
             "member": "serviceAccount:gke-sa@p-dre-eu-services.iam.gserviceaccount.com",
-            "project": "di-test-blueprint-odrs-data-1",
+            "project": "myproject-example-1",
             "role": "roles/storage.admin"
           },
           "depends_on": [
@@ -176,8 +178,8 @@ var SampleJSONState = `
           "values": {
             "disable_dependent_services": null,
             "disable_on_destroy": false,
-            "id": "di-test-blueprint-odrs-data-1/datastore.googleapis.com",
-            "project": "di-test-blueprint-odrs-data-1",
+            "id": "myproject-example-1/datastore.googleapis.com",
+            "project": "myproject-example-1",
             "service": "datastore.googleapis.com",
             "timeouts": null
           },
@@ -201,8 +203,8 @@ var SampleJSONState = `
           "values": {
             "disable_dependent_services": null,
             "disable_on_destroy": false,
-            "id": "di-test-blueprint-odrs-data-1/storage-component.googleapis.com",
-            "project": "di-test-blueprint-odrs-data-1",
+            "id": "myproject-example-1/storage-component.googleapis.com",
+            "project": "myproject-example-1",
             "service": "storage-component.googleapis.com",
             "timeouts": null
           },
@@ -226,8 +228,8 @@ var SampleJSONState = `
           "values": {
             "disable_dependent_services": null,
             "disable_on_destroy": false,
-            "id": "di-test-blueprint-odrs-data-1/storage.googleapis.com",
-            "project": "di-test-blueprint-odrs-data-1",
+            "id": "myproject-example-1/storage.googleapis.com",
+            "project": "myproject-example-1",
             "service": "storage.googleapis.com",
             "timeouts": null
           },
@@ -251,8 +253,8 @@ var SampleJSONState = `
           "values": {
             "disable_dependent_services": null,
             "disable_on_destroy": false,
-            "id": "di-test-blueprint-odrs-data-1/spanner.googleapis.com",
-            "project": "di-test-blueprint-odrs-data-1",
+            "id": "myproject-example-1/spanner.googleapis.com",
+            "project": "myproject-example-1",
             "service": "spanner.googleapis.com",
             "timeouts": null
           },
@@ -276,8 +278,8 @@ var SampleJSONState = `
           "values": {
             "disable_dependent_services": null,
             "disable_on_destroy": false,
-            "id": "di-test-blueprint-odrs-data-1/appengine.googleapis.com",
-            "project": "di-test-blueprint-odrs-data-1",
+            "id": "myproject-example-1/appengine.googleapis.com",
+            "project": "myproject-example-1",
             "service": "appengine.googleapis.com",
             "timeouts": null
           },
@@ -295,7 +297,7 @@ var SampleJSONState = `
           "mode": "managed",
           "type": "google_storage_bucket",
           "name": "default",
-          "index": "gridstore-v0-services-di-test-blueprint-odrs-data-1",
+          "index": "gridstore-v0-services-myproject-example-1",
           "provider_name": "google",
           "schema_version": 0,
           "values": {
@@ -304,18 +306,18 @@ var SampleJSONState = `
             "default_event_based_hold": false,
             "encryption": [],
             "force_destroy": false,
-            "id": "gridstore-v0-services-di-test-blueprint-odrs-data-1",
+            "id": "gridstore-v0-services-myproject-example-1",
             "labels": null,
             "lifecycle_rule": [],
             "location": "EUROPE-WEST3",
             "logging": [],
-            "name": "gridstore-v0-services-di-test-blueprint-odrs-data-1",
-            "project": "di-test-blueprint-odrs-data-1",
+            "name": "gridstore-v0-services-myproject-example-1",
+            "project": "myproject-example-1",
             "requester_pays": false,
             "retention_policy": [],
-            "self_link": "https://www.googleapis.com/storage/v1/b/gridstore-v0-services-di-test-blueprint-odrs-data-1",
+            "self_link": "https://www.googleapis.com/storage/v1/b/gridstore-v0-services-myproject-example-1",
             "storage_class": "STANDARD",
-            "url": "gs://gridstore-v0-services-di-test-blueprint-odrs-data-1",
+            "url": "gs://gridstore-v0-services-myproject-example-1",
             "versioning": [],
             "website": []
           },
@@ -328,7 +330,7 @@ var SampleJSONState = `
           "mode": "managed",
           "type": "google_storage_bucket",
           "name": "default",
-          "index": "digital-re-di-test-blueprint-odrs-data-1",
+          "index": "digital-re-myproject-example-1",
           "provider_name": "google",
           "schema_version": 0,
           "values": {
@@ -337,18 +339,18 @@ var SampleJSONState = `
             "default_event_based_hold": false,
             "encryption": [],
             "force_destroy": false,
-            "id": "digital-re-di-test-blueprint-odrs-data-1",
+            "id": "digital-re-myproject-example-1",
             "labels": null,
             "lifecycle_rule": [],
             "location": "EUROPE-WEST3",
             "logging": [],
-            "name": "digital-re-di-test-blueprint-odrs-data-1",
-            "project": "di-test-blueprint-odrs-data-1",
+            "name": "digital-re-myproject-example-1",
+            "project": "myproject-example-1",
             "requester_pays": false,
             "retention_policy": [],
-            "self_link": "https://www.googleapis.com/storage/v1/b/digital-re-di-test-blueprint-odrs-data-1",
+            "self_link": "https://www.googleapis.com/storage/v1/b/digital-re-myproject-example-1",
             "storage_class": "STANDARD",
-            "url": "gs://digital-re-di-test-blueprint-odrs-data-1",
+            "url": "gs://digital-re-myproject-example-1",
             "versioning": [],
             "website": []
           },
@@ -361,7 +363,7 @@ var SampleJSONState = `
           "mode": "managed",
           "type": "google_storage_bucket",
           "name": "default",
-          "index": "gridstore-v0-di-test-blueprint-odrs-data-1",
+          "index": "gridstore-v0-myproject-example-1",
           "provider_name": "google",
           "schema_version": 0,
           "values": {
@@ -370,18 +372,18 @@ var SampleJSONState = `
             "default_event_based_hold": false,
             "encryption": [],
             "force_destroy": false,
-            "id": "gridstore-v0-di-test-blueprint-odrs-data-1",
+            "id": "gridstore-v0-myproject-example-1",
             "labels": null,
             "lifecycle_rule": [],
             "location": "EUROPE-WEST3",
             "logging": [],
-            "name": "gridstore-v0-di-test-blueprint-odrs-data-1",
-            "project": "di-test-blueprint-odrs-data-1",
+            "name": "gridstore-v0-myproject-example-1",
+            "project": "myproject-example-1",
             "requester_pays": false,
             "retention_policy": [],
-            "self_link": "https://www.googleapis.com/storage/v1/b/gridstore-v0-di-test-blueprint-odrs-data-1",
+            "self_link": "https://www.googleapis.com/storage/v1/b/gridstore-v0-myproject-example-1",
             "storage_class": "STANDARD",
-            "url": "gs://gridstore-v0-di-test-blueprint-odrs-data-1",
+            "url": "gs://gridstore-v0-myproject-example-1",
             "versioning": [],
             "website": []
           },
@@ -404,7 +406,7 @@ var SampleJSONState = `
                 "auto_create_network": false,
                 "billing_account": "002A75-ABB3C9-680D62",
                 "folder_id": "746484843613",
-                "id": "projects/di-test-blueprint-odrs-data-1",
+                "id": "projects/myproject-example-1",
                 "labels": {
                   "ac-number": "us106088",
                   "env": "non-prod",
@@ -413,10 +415,10 @@ var SampleJSONState = `
                   "ssr": "ear-aa-7542",
                   "technical-owner": "wdossantosjunior"
                 },
-                "name": "di-test-blueprint-odrs-data-1",
+                "name": "myproject-example-1",
                 "number": "1034955138102",
                 "org_id": "",
-                "project_id": "di-test-blueprint-odrs-data-1",
+                "project_id": "myproject-example-1",
                 "skip_delete": null,
                 "timeouts": null
               }
@@ -444,8 +446,8 @@ var SampleJSONState = `
                   }
                 ],
                 "etag": "BwWsIPSdhKk=",
-                "id": "di-test-blueprint-odrs-data-1/audit_config/allServices",
-                "project": "di-test-blueprint-odrs-data-1",
+                "id": "myproject-example-1/audit_config/allServices",
+                "project": "myproject-example-1",
                 "service": "allServices"
               },
               "depends_on": [
@@ -462,9 +464,9 @@ var SampleJSONState = `
               "values": {
                 "condition": [],
                 "etag": "BwWsIPSdhKk=",
-                "id": "di-test-blueprint-odrs-data-1/roles/owner/user:wdossantosjunior@slb.com",
+                "id": "myproject-example-1/roles/owner/user:wdossantosjunior@slb.com",
                 "member": "user:wdossantosjunior@slb.com",
-                "project": "di-test-blueprint-odrs-data-1",
+                "project": "myproject-example-1",
                 "role": "roles/owner"
               },
               "depends_on": [
@@ -519,12 +521,12 @@ var SampleJSONState = `
                     "description": "",
                     "etag": "oOFJzOdhpm7y2rejxTxBkw==",
                     "friendly_name": "",
-                    "id": "projects/di-test-blueprint-odrs-data-1/datasets/audit_logs",
+                    "id": "projects/myproject-example-1/datasets/audit_logs",
                     "labels": null,
                     "last_modified_time": 1596632447640,
                     "location": "US",
-                    "project": "di-test-blueprint-odrs-data-1",
-                    "self_link": "https://www.googleapis.com/bigquery/v2/projects/di-test-blueprint-odrs-data-1/datasets/audit_logs",
+                    "project": "myproject-example-1",
+                    "self_link": "https://www.googleapis.com/bigquery/v2/projects/myproject-example-1/datasets/audit_logs",
                     "timeouts": null
                   },
                   "depends_on": [
@@ -541,11 +543,11 @@ var SampleJSONState = `
                   "schema_version": 0,
                   "values": {
                     "bigquery_options": [],
-                    "destination": "bigquery.googleapis.com/projects/di-test-blueprint-odrs-data-1/datasets/audit_logs",
-                    "filter": "logName = (\n        \"projects/di-test-blueprint-odrs-data-1/logs/cloudaudit.googleapis.com%2Factivity\"\n        OR \"projects/di-test-blueprint-odrs-data-1/logs/cloudaudit.googleapis.com%2Fsystem_events\"\n        OR \"projects/di-test-blueprint-odrs-data-1/logs/cloudaudit.googleapis.com%2Fdata_access\"\n        OR \"projects/di-test-blueprint-odrs-data-1/logs/compute.googleapis.com%2Fvpc_flows\"\n      )",
-                    "id": "projects/di-test-blueprint-odrs-data-1/sinks/audit_logs",
+                    "destination": "bigquery.googleapis.com/projects/myproject-example-1/datasets/audit_logs",
+                    "filter": "logName = (\n        \"projects/myproject-example-1/logs/cloudaudit.googleapis.com%2Factivity\"\n        OR \"projects/myproject-example-1/logs/cloudaudit.googleapis.com%2Fsystem_events\"\n        OR \"projects/myproject-example-1/logs/cloudaudit.googleapis.com%2Fdata_access\"\n        OR \"projects/myproject-example-1/logs/compute.googleapis.com%2Fvpc_flows\"\n      )",
+                    "id": "projects/myproject-example-1/sinks/audit_logs",
                     "name": "audit_logs",
-                    "project": "di-test-blueprint-odrs-data-1",
+                    "project": "myproject-example-1",
                     "unique_writer_identity": false,
                     "writer_identity": "serviceAccount:cloud-logs@system.gserviceaccount.com"
                   },
@@ -565,8 +567,8 @@ var SampleJSONState = `
                   "values": {
                     "disable_dependent_services": null,
                     "disable_on_destroy": false,
-                    "id": "di-test-blueprint-odrs-data-1/bigquery.googleapis.com",
-                    "project": "di-test-blueprint-odrs-data-1",
+                    "id": "myproject-example-1/bigquery.googleapis.com",
+                    "project": "myproject-example-1",
                     "service": "bigquery.googleapis.com",
                     "timeouts": null
                   },
@@ -584,3 +586,4 @@ var SampleJSONState = `
   }
 }
 `
+var SampleReader = strings.NewReader(SampleJSONState)

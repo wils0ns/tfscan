@@ -17,6 +17,9 @@ var ColorMagenta = color.New(color.FgMagenta).Set().SprintFunc()
 // ColorYellow formats text with this color
 var ColorYellow = color.New(color.FgYellow).Set().SprintFunc()
 
+// ColorRed formats text with this color
+var ColorRed = color.New(color.FgRed).Set().SprintFunc()
+
 // ColorWhite formats text with this color
 // var ColorWhite = color.New(color.FgWhite).Set().SprintFunc()
 

@@ -11,10 +11,9 @@ import (
 
 // TODO: use a better testing package
 
-var sampleReader = strings.NewReader(testdata.SampleJSONState)
-
 func TestNewState(t *testing.T) {
-	_, err := terraform.NewState(sampleReader)
+	testdata.SampleReader.Seek(0, 0)
+	_, err := terraform.NewState(testdata.SampleReader)
 	if err != nil {
 		t.Error(err)
 	}
@@ -29,8 +28,8 @@ func TestNewState(t *testing.T) {
 }
 
 func TestGetResourcesByFullAddress(t *testing.T) {
-	sampleReader.Seek(0, 0)
-	state, err := terraform.NewState(sampleReader)
+	testdata.SampleReader.Seek(0, 0)
+	state, err := terraform.NewState(testdata.SampleReader)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -99,8 +98,8 @@ func TestGetResourcesByFullAddress(t *testing.T) {
 }
 
 func TestResourceTypes(t *testing.T) {
-	sampleReader.Seek(0, 0)
-	state, err := terraform.NewState(sampleReader)
+	testdata.SampleReader.Seek(0, 0)
+	state, err := terraform.NewState(testdata.SampleReader)
 	if err != nil {
 		t.Fatal(err)
 	}

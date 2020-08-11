@@ -13,11 +13,11 @@ import (
 // Command line flags
 var flagNoColor = flag.Bool("no-color", false, "Disable color output")
 var flagJSONFile = flag.String("json", "", "Path to a state or plan JSON file")
+var flagDiff = flag.String("diff", "", "Loads a second state or plan JSON file and shows the difference between them")
 var flagResTypes = flag.Bool("types", false, "Only list the type of resources present in the state")
 var flagResGet = flag.String("get", "", "Shows the content of the resource that matches the given full address")
 
 // var flagResFind = flag.String("find", "", "Shows the content of all resources where the full address matches the given regular expression")
-// var flagStateDiff = flag.String("diff", "", "Loads a second state or plan JSON file and shows the difference between them")
 
 func printExamples() {
 	fmt.Println("Examples:")
@@ -48,34 +48,43 @@ func initUI() {
 	}
 }
 
-func loadState() *terraform.State {
+func loadStateFromJSON(name string) (*terraform.State, error) {
+	jsonFile, err := os.Open(name)
+	if err != nil {
+		return nil, fmt.Errorf("%v(%v)", err, *flagJSONFile)
+	}
+	defer jsonFile.Close()
+	state, err := terraform.NewState(jsonFile)
+	if err != nil {
+		return nil, err
+
+	}
+	return state, nil
+}
+
+func loadState() (*terraform.State, error) {
 
 	reader := os.Stdin
 	stat, _ := reader.Stat()
 
-	// If nothing to read from stdin, expecting -json flag
-	if (stat.Mode() & os.ModeCharDevice) != 0 {
-		if *flagJSONFile != "" {
-			jsonFile, err := os.Open(*flagJSONFile)
-			if err != nil {
-				fmt.Fprintf(os.Stderr, "error: %v(%v)\n", err, *flagJSONFile)
-				os.Exit(1)
-			}
-			defer jsonFile.Close()
-			reader = jsonFile
-		} else {
-			fmt.Fprintf(os.Stderr, "error: A valid state file must be specified\n")
-			os.Exit(1)
+	// If something to read from stdin, expecting -json flag
+	if (stat.Mode() & os.ModeCharDevice) == 0 {
+		state, err := terraform.NewState(reader)
+		if err != nil {
+			return nil, err
 		}
-	}
+		return state, nil
 
-	state, err := terraform.NewState(reader)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "error: %v\n", err)
-		os.Exit(1)
-	}
+	} else if *flagJSONFile != "" {
+		state, err := loadStateFromJSON(*flagJSONFile)
+		if err != nil {
+			return nil, fmt.Errorf("%v(%v)", err, *flagJSONFile)
+		}
+		return state, nil
 
-	return state
+	} else {
+		return nil, fmt.Errorf("error: A valid state file must be specified")
+	}
 }
 
 func parseCommandLine(args []string) {
@@ -88,15 +97,72 @@ func parseCommandLine(args []string) {
 		color.NoColor = true
 	}
 
-	state := loadState()
+	state, err := loadState()
+	if err != nil {
+		views.PrintAndExitStdErr(err)
+	}
+
+	// TODO: make parser DRYer
 
 	if *flagResTypes {
-		views.PrintResourceTypes(state)
+		if *flagDiff != "" {
+			otherState, err := loadStateFromJSON(*flagDiff)
+			if err != nil {
+				views.PrintAndExitStdErr(err)
+			}
+			resA, err := state.ResourceTypes()
+			if err != nil {
+				views.PrintAndExitStdErr(err)
+			}
+
+			resB, err := otherState.ResourceTypes()
+			if err != nil {
+				views.PrintAndExitStdErr(err)
+			}
+
+			err = views.PrintDiff(resA, resB)
+			if err != nil {
+				views.PrintAndExitStdErr(err)
+			}
+		} else {
+			err = views.PrintResourceTypes(state)
+			if err != nil {
+				views.PrintAndExitStdErr(err)
+			}
+		}
+
 		os.Exit(0)
 	}
 
 	if *flagResGet != "" {
-		views.PrintResources(state, *flagResGet)
+		if *flagDiff != "" {
+			otherState, err := loadStateFromJSON(*flagDiff)
+			if err != nil {
+				views.PrintAndExitStdErr(err)
+			}
+			resA, err := state.ResourceLookup(*flagResGet)
+			if err != nil {
+				err = fmt.Errorf("%v: %v", *flagJSONFile, err)
+				views.PrintAndExitStdErr(err)
+			}
+
+			resB, err := otherState.ResourceLookup(*flagResGet)
+			if err != nil {
+				err = fmt.Errorf("%v: %v", *flagDiff, err)
+				views.PrintAndExitStdErr(err)
+			}
+
+			err = views.PrintDiff(resA, resB)
+			if err != nil {
+				views.PrintAndExitStdErr(err)
+			}
+		} else {
+			err = views.PrintResources(state, *flagResGet)
+			if err != nil {
+				views.PrintAndExitStdErr(err)
+			}
+		}
+
 		os.Exit(0)
 	}
 

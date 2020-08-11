@@ -1,6 +1,9 @@
 package terraform
 
-import "fmt"
+import (
+	"fmt"
+	"reflect"
+)
 
 // Resource represents state resources
 type Resource struct {
@@ -12,6 +15,11 @@ type Resource struct {
 	ProviderName  string                 `json:"provider_name"`
 	SchemaVersion int                    `json:"schema_version"`
 	Values        map[string]interface{} `json:"values"`
+}
+
+// Equals compares the resource against another
+func (res *Resource) Equals(r *Resource) bool {
+	return reflect.DeepEqual(res, r)
 }
 
 // ResourceNotFoundError raised when resources are not found
