@@ -16,7 +16,7 @@ Or downloading the binary for a particular [release](https://github.com/wils0ns/
 
 ## Examples
 
-### Reading from `terraform` stdout
+### Reading from terraform stdout
 
 Command:
 
