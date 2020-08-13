@@ -128,12 +128,12 @@ Output:
 Command:
 
 ```bash
+tfscan -json state2.json -diff state1.json -get google_app_engine_application.default
 ```
 
 Output:
 
 ```bash
-tfscan -json state2.json -diff state1.json -get google_app_engine_application.default
  [
    {
      "address": "google_app_engine_application.default",
