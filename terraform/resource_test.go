@@ -9,8 +9,8 @@ import (
 )
 
 func TestResourceEquals(t *testing.T) {
-	testdata.SampleReader.Seek(0, 0)
-	state, err := terraform.NewState(testdata.SampleReader)
+	testdata.StateReader.Seek(0, 0)
+	state, err := terraform.NewState(testdata.StateReader)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -25,8 +25,8 @@ func TestResourceEquals(t *testing.T) {
 		t.Error("Expected resource copy to be equal to original")
 	}
 
-	testdata.SampleReader.Seek(0, 0)
-	stateCopy, err := terraform.NewState(testdata.SampleReader)
+	testdata.StateReader.Seek(0, 0)
+	stateCopy, err := terraform.NewState(testdata.StateReader)
 	if err != nil {
 		t.Fatal(err)
 	}

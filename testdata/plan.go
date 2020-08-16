@@ -2,11 +2,13 @@ package testdata
 
 import "strings"
 
-var SampleJSONState = `
+// TODO provide actual plan sample
+
+var SampleJSONPlan = `
 {
   "format_version": "0.1",
   "terraform_version": "0.12.29",
-  "values": {
+  "planned_values": {
     "root_module": {
       "resources": [
         {
@@ -586,4 +588,5 @@ var SampleJSONState = `
   }
 }
 `
-var SampleReader = strings.NewReader(SampleJSONState)
+
+var PlanReader = strings.NewReader(SampleJSONPlan)

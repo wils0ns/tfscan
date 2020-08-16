@@ -9,15 +9,15 @@ import (
 	"github.com/wils0ns/tfscan/testdata"
 )
 
-func TestNewState(t *testing.T) {
-	testdata.StateReader.Seek(0, 0)
-	_, err := terraform.NewState(testdata.StateReader)
+func TestNewPlan(t *testing.T) {
+	testdata.PlanReader.Seek(0, 0)
+	_, err := terraform.NewPlan(testdata.PlanReader)
 	if err != nil {
 		t.Error(err)
 	}
 
 	r := strings.NewReader("")
-	_, err = terraform.NewState(r)
+	_, err = terraform.NewPlan(r)
 	expectedError := "*json.SyntaxError"
 	actualError := fmt.Sprintf("%T", err)
 	if actualError != expectedError {
@@ -25,9 +25,9 @@ func TestNewState(t *testing.T) {
 	}
 }
 
-func TestGetResourcesByFullAddress(t *testing.T) {
-	testdata.StateReader.Seek(0, 0)
-	state, err := terraform.NewState(testdata.StateReader)
+func TestPlanGetResourcesByFullAddress(t *testing.T) {
+	testdata.PlanReader.Seek(0, 0)
+	state, err := terraform.NewPlan(testdata.PlanReader)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -95,9 +95,9 @@ func TestGetResourcesByFullAddress(t *testing.T) {
 	}
 }
 
-func TestResourceTypes(t *testing.T) {
-	testdata.StateReader.Seek(0, 0)
-	state, err := terraform.NewState(testdata.StateReader)
+func TestPlanResourceTypes(t *testing.T) {
+	testdata.PlanReader.Seek(0, 0)
+	state, err := terraform.NewPlan(testdata.PlanReader)
 	if err != nil {
 		t.Fatal(err)
 	}

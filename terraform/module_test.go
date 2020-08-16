@@ -1,7 +1,6 @@
 package terraform_test
 
 import (
-	"strings"
 	"testing"
 
 	"github.com/wils0ns/tfscan/terraform"
@@ -17,7 +16,7 @@ func (v *visitor) Visit(m, p *terraform.Module) {
 }
 
 func TestVisitModules(t *testing.T) {
-	state, err := terraform.NewState(strings.NewReader(testdata.SampleJSONState))
+	state, err := terraform.NewState(testdata.StateReader)
 	if err != nil {
 		t.Fatal(err)
 	}
