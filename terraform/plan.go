@@ -30,9 +30,9 @@ func NewPlan(r io.Reader) (*Plan, error) {
 }
 
 // ResourceLookup returns a slice of  resources that matches the given address regular expression
-func (s *Plan) ResourceLookup(address string) ([]*Resource, error) {
-	resLookup := ResourceLookupVisitor{AddressRegExp: address}
-	for _, m := range s.Values {
+func (p *Plan) ResourceLookup(address string) ([]*Resource, error) {
+	resLookup := ResourceLookupVisitor{AddressRegExp: address, TerraformVersion: p.TerraformVersion}
+	for _, m := range p.Values {
 		resLookup.Visit(m, nil)
 	}
 
@@ -43,9 +43,9 @@ func (s *Plan) ResourceLookup(address string) ([]*Resource, error) {
 }
 
 // ResourceTypes returns a list of all the unique resources within the plan
-func (s *Plan) ResourceTypes() ([]string, error) {
+func (p *Plan) ResourceTypes() ([]string, error) {
 	v := NewResourceTypeVisitor()
-	for _, m := range s.Values {
+	for _, m := range p.Values {
 		m.VisitModules(v, nil)
 	}
 

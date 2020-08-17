@@ -2,24 +2,29 @@ package terraform
 
 import (
 	"fmt"
+	"log"
 	"regexp"
 	"sort"
+
+	"github.com/Masterminds/semver"
 )
 
 // ResourceLookupVisitor stores the resource found by the given address
 type ResourceLookupVisitor struct {
-	AddressRegExp string
-	Resources     []*Resource
+	TerraformVersion string
+	AddressRegExp    string
+	Resources        []*Resource
 }
 
 // Visit searches for resources that matches the Visitor's AddressRegExp field regular expression
+// TODO: Design a way to capute errors from the visitor
 func (v *ResourceLookupVisitor) Visit(module, parent *Module) {
 
 	for _, res := range module.Resources {
 
 		re, err := regexp.Compile(regexp.QuoteMeta(v.AddressRegExp))
 		if err != nil {
-			fmt.Println(err)
+			log.Println(err)
 			return
 		}
 
@@ -33,7 +38,21 @@ func (v *ResourceLookupVisitor) Visit(module, parent *Module) {
 		}
 
 		if re.MatchString(address) {
-			res.FullAddress = address
+			version, err := semver.NewVersion(v.TerraformVersion)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			c, err := semver.NewConstraint(">= 0.13.0")
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			if c.Check(version) {
+				res.FullAddress = res.Address
+			} else {
+				res.FullAddress = address
+			}
 			v.Resources = append(v.Resources, res)
 		}
 	}

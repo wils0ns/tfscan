@@ -8,6 +8,35 @@ import (
 	"github.com/wils0ns/tfscan/testdata"
 )
 
+func TestResourceFullAddress(t *testing.T) {
+	testdata.StateReader.Seek(0, 0)
+	state, err := terraform.NewState(testdata.StateReader)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	t.Run("beforeV0.13.0", func(t *testing.T) {
+		resList, err := state.ResourceLookup("google_project.default")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if resList[0].FullAddress != "module.project.google_project.default" {
+			t.Errorf("Expected: %v, got: %v", "module.project.google_project.default", resList[0].FullAddress)
+		}
+	})
+
+	t.Run("afterV0.13.0", func(t *testing.T) {
+		state.TerraformVersion = "0.13.0"
+		resList, err := state.ResourceLookup("google_project.default")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if resList[0].FullAddress != "google_project.default" {
+			t.Errorf("Expected: %v, got: %v", "google_project.default", resList[0].FullAddress)
+		}
+	})
+}
+
 func TestResourceEquals(t *testing.T) {
 	testdata.StateReader.Seek(0, 0)
 	state, err := terraform.NewState(testdata.StateReader)

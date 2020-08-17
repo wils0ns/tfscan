@@ -31,7 +31,7 @@ func NewState(r io.Reader) (*State, error) {
 
 // ResourceLookup returns a slice of  resources that matches the given address regular expression
 func (s *State) ResourceLookup(address string) ([]*Resource, error) {
-	resLookup := ResourceLookupVisitor{AddressRegExp: address}
+	resLookup := ResourceLookupVisitor{AddressRegExp: address, TerraformVersion: s.TerraformVersion}
 	for _, m := range s.Values {
 		resLookup.Visit(m, nil)
 	}
