@@ -33,6 +33,7 @@ func (v *ResourceLookupVisitor) Visit(module, parent *Module) {
 		}
 
 		if re.MatchString(address) {
+			res.FullAddress = address
 			v.Resources = append(v.Resources, res)
 		}
 	}

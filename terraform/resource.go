@@ -15,6 +15,7 @@ type Resource struct {
 	ProviderName  string                 `json:"provider_name"`
 	SchemaVersion int                    `json:"schema_version"`
 	Values        map[string]interface{} `json:"values"`
+	FullAddress   string
 }
 
 // Equals compares the resource against another
