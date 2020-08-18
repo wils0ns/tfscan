@@ -5,8 +5,6 @@ import (
 	"log"
 	"regexp"
 	"sort"
-
-	"github.com/Masterminds/semver"
 )
 
 // ResourceLookupVisitor stores the resource found by the given address
@@ -38,17 +36,7 @@ func (v *ResourceLookupVisitor) Visit(module, parent *Module) {
 		}
 
 		if re.MatchString(address) {
-			version, err := semver.NewVersion(v.TerraformVersion)
-			if err != nil {
-				log.Println(err)
-				return
-			}
-			c, err := semver.NewConstraint(">= 0.13.0")
-			if err != nil {
-				log.Println(err)
-				return
-			}
-			if c.Check(version) {
+			if CheckVersionConstraint(v.TerraformVersion, ">= 0.13.0") {
 				res.FullAddress = res.Address
 			} else {
 				res.FullAddress = address

@@ -13,11 +13,9 @@ import (
 // Command line flags
 var flagNoColor = flag.Bool("no-color", false, "Disable color output")
 var flagJSONFile = flag.String("json", "", "Path to a state or plan JSON file")
-var flagDiff = flag.String("diff", "", "Loads a second state or plan JSON file and shows the difference between them")
-var flagResTypes = flag.Bool("types", false, "Only list the type of resources present in the state")
+var flagDiff = flag.String("diff", "", "Loads a second file and shows the difference between them")
+var flagResTypes = flag.Bool("types", false, "Only list the type of resources present")
 var flagResGet = flag.String("get", "", "Shows the content of the resource that matches the given full address")
-
-// var flagResFind = flag.String("find", "", "Shows the content of all resources where the full address matches the given regular expression")
 
 func printExamples() {
 	fmt.Println("Examples:")
@@ -48,42 +46,42 @@ func initUI() {
 	}
 }
 
-func loadStateFromJSON(name string) (*terraform.State, error) {
+func loadFileFromJSON(f interface{}, name string) error {
 	jsonFile, err := os.Open(name)
 	if err != nil {
-		return nil, fmt.Errorf("%v(%v)", err, *flagJSONFile)
+		return fmt.Errorf("%v(%v)", err, *flagJSONFile)
 	}
 	defer jsonFile.Close()
-	state, err := terraform.NewState(jsonFile)
+	err = terraform.NewFile(f, jsonFile)
 	if err != nil {
-		return nil, err
+		return err
 
 	}
-	return state, nil
+	return nil
 }
 
-func loadState() (*terraform.State, error) {
+func loadFile(f interface{}) error {
 
 	reader := os.Stdin
 	stat, _ := reader.Stat()
 
 	// If something to read from stdin, expecting -json flag
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
-		state, err := terraform.NewState(reader)
+		err := terraform.NewFile(f, reader)
 		if err != nil {
-			return nil, err
+			return err
 		}
-		return state, nil
+		return nil
 
 	} else if *flagJSONFile != "" {
-		state, err := loadStateFromJSON(*flagJSONFile)
+		err := loadFileFromJSON(f, *flagJSONFile)
 		if err != nil {
-			return nil, fmt.Errorf("%v(%v)", err, *flagJSONFile)
+			return fmt.Errorf("%v(%v)", err, *flagJSONFile)
 		}
-		return state, nil
+		return nil
 
 	} else {
-		return nil, fmt.Errorf("error: A valid state file must be specified")
+		return fmt.Errorf("error: A valid state file must be specified")
 	}
 }
 
@@ -97,7 +95,8 @@ func parseCommandLine(args []string) {
 		color.NoColor = true
 	}
 
-	state, err := loadState()
+	file := &terraform.State{}
+	err := loadFile(file)
 	if err != nil {
 		views.PrintAndExitStdErr(err)
 	}
@@ -106,16 +105,17 @@ func parseCommandLine(args []string) {
 
 	if *flagResTypes {
 		if *flagDiff != "" {
-			otherState, err := loadStateFromJSON(*flagDiff)
+			otherFile := &terraform.State{}
+			err = loadFileFromJSON(otherFile, *flagDiff)
 			if err != nil {
 				views.PrintAndExitStdErr(err)
 			}
-			resA, err := state.ResourceTypes()
+			resA, err := file.ResourceTypes()
 			if err != nil {
 				views.PrintAndExitStdErr(err)
 			}
 
-			resB, err := otherState.ResourceTypes()
+			resB, err := otherFile.ResourceTypes()
 			if err != nil {
 				views.PrintAndExitStdErr(err)
 			}
@@ -125,7 +125,7 @@ func parseCommandLine(args []string) {
 				views.PrintAndExitStdErr(err)
 			}
 		} else {
-			err = views.PrintResourceTypes(state)
+			err := views.PrintResourceTypes(file)
 			if err != nil {
 				views.PrintAndExitStdErr(err)
 			}
@@ -136,11 +136,12 @@ func parseCommandLine(args []string) {
 
 	if *flagResGet != "" {
 		if *flagDiff != "" {
-			otherState, err := loadStateFromJSON(*flagDiff)
+			otherState := &terraform.State{}
+			err := loadFileFromJSON(otherState, *flagDiff)
 			if err != nil {
 				views.PrintAndExitStdErr(err)
 			}
-			resA, err := state.ResourceLookup(*flagResGet)
+			resA, err := file.ResourceLookup(*flagResGet)
 			if err != nil {
 				err = fmt.Errorf("%v: %v", *flagJSONFile, err)
 				views.PrintAndExitStdErr(err)
@@ -157,7 +158,7 @@ func parseCommandLine(args []string) {
 				views.PrintAndExitStdErr(err)
 			}
 		} else {
-			err = views.PrintResources(state, *flagResGet)
+			err = views.PrintResources(file, *flagResGet)
 			if err != nil {
 				views.PrintAndExitStdErr(err)
 			}
@@ -166,7 +167,7 @@ func parseCommandLine(args []string) {
 		os.Exit(0)
 	}
 
-	views.PrintResourceTree(state)
+	views.PrintResourceTree(file)
 	os.Exit(0)
 
 	// Print tool usage if no arguments have been passed

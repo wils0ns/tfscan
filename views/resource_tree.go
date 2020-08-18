@@ -42,7 +42,7 @@ func (v *resourceTree) Visit(module *terraform.Module, parent *terraform.Module)
 
 // PrintResourceTree prints all resources within a state grouped by module
 func PrintResourceTree(state *terraform.State) {
-	for key, mod := range state.Values {
+	for key, mod := range state.ActualValues() {
 		fmt.Printf("%v:\n", ColorModuleAddress(key))
 		mod.VisitModules(&resourceTree{}, nil)
 	}
