@@ -12,7 +12,7 @@ cd tfscan
 go install
 ```
 
-Or downloading the binary for a particular [release](https://github.com/wils0ns/tfscan/releases).
+Or download the binary for a particular [release](https://github.com/wils0ns/tfscan/releases).
 
 ## Examples
 
@@ -64,14 +64,17 @@ tfscan -json state.json -types
 Output:
 
 ```bash
-google_app_engine_application
-google_bigquery_dataset
-google_logging_project_sink
-google_project
-google_project_iam_audit_config
-google_project_iam_member
-google_project_service
-google_storage_bucket
+[
+  "google_app_engine_application",
+  "google_bigquery_dataset",
+  "google_logging_project_sink",
+  "google_project",
+  "google_project_iam_audit_config",
+  "google_project_iam_member",
+  "google_project_service",
+  "google_storage_bucket"
+]
+
 ```
 
 ### Get resources by regular expression
