@@ -31,8 +31,8 @@ func (v *ResourceLookupVisitor) Visit(module, parent *Module) {
 			address = fmt.Sprintf("%v.%v", module.Address, address)
 		}
 
-		if res.Index != "" {
-			address = fmt.Sprintf("%v[\"%v\"]", address, res.Index)
+		if res.Index != nil {
+			address = fmt.Sprintf("%v[\"%v\"]", address, fmt.Sprintf("%v", res.Index))
 		}
 
 		if re.MatchString(address) {
