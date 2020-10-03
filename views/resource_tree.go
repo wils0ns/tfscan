@@ -31,9 +31,9 @@ func (v *resourceTree) Visit(module *terraform.Module, parent *terraform.Module)
 
 	for _, res := range module.Resources {
 		address := ColorResourceAddress(res.Address)
-		if res.Index != "" {
-			address = fmt.Sprintf("%v%v", address, ColorResourceIndex(fmt.Sprintf("[\"%v\"]", res.Index)))
-		}
+		// if res.Index != nil {
+		// 	address = fmt.Sprintf("%v%v", address, ColorResourceIndex(fmt.Sprintf("[\"%v\"]", res.Index)))
+		// }
 
 		fmt.Printf("%v%v%v\n", padding, prefix, address)
 
